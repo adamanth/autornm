@@ -2,7 +2,6 @@ package ru.adamanth.autornm;
 
 import ru.adamanth.autornm.contentprovider.RepairContentProvider;
 import ru.adamanth.autornm.db.tables.RepairTable;
-import ru.adamanth.autornm.dummy.DummyContent;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -81,7 +80,8 @@ public class RepairListFragment extends ListFragment implements
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		//mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		mCallbacks.onItemSelected(String.valueOf(id));
 	}
 
 	@Override
