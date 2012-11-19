@@ -1,5 +1,7 @@
 package ru.adamanth.autornm;
 
+import java.text.NumberFormat;
+
 import ru.adamanth.autornm.db.tables.RepairItemTable;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,17 +20,20 @@ public class RepairItemListAdapter extends ResourceCursorAdapter {
 
 		if (cursor != null && cursor.getCount() > 0
 				&& cursor.getPosition() >= 0) {
-			TextView textView = (TextView) view.findViewById(R.id.text1);
+			TextView textView = (TextView) view.findViewById(R.id.spareName);
 			textView.setText(cursor.getString(cursor
 					.getColumnIndex(RepairItemTable.COLUMN_SPARE_NAME)));
 
-			textView = (TextView) view.findViewById(R.id.text2);
-			textView.setText(cursor.getString(cursor
-					.getColumnIndex(RepairItemTable.COLUMN_SPARE_PRICE)));
+			textView = (TextView) view.findViewById(R.id.sparePrice);
+			textView.setText(NumberFormat
+					.getCurrencyInstance()
+					.format(cursor.getDouble(cursor
+							.getColumnIndex(RepairItemTable.COLUMN_SPARE_PRICE))));
 
-			textView = (TextView) view.findViewById(R.id.text3);
-			textView.setText(cursor.getString(cursor
-					.getColumnIndex(RepairItemTable.COLUMN_WORK_COST)));
+			textView = (TextView) view.findViewById(R.id.workCost);
+			textView.setText(NumberFormat.getCurrencyInstance().format(
+					cursor.getDouble(cursor
+							.getColumnIndex(RepairItemTable.COLUMN_WORK_COST))));
 
 		}
 	}

@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 8;
 	private static final String DATABASE_NAME = "autornm";
 
 	public DatabaseHelper(Context context) {
@@ -52,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 
 		values.put(RepairTable.COLUMN_MILEAGE, 14500);
+		values.put(RepairTable.COLUMN_STATION_NAME, "СТС-МОТОРС");
 
 		long repairId = db.insert(RepairTable.TABLE_REPAIR, "", values);
 
@@ -68,9 +69,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
 				"Колодки тормозные передние");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 1600.00);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 1900.34);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "Ate");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "456123789");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "2383201");
 		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
 		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
 
@@ -78,9 +79,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
 				"Колодки тормозные задние");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 950.00);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 956.93);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "TRW");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "789123654");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "GDB 1515");
 		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
 		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
 
@@ -95,6 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 
 		values.put(RepairTable.COLUMN_MILEAGE, 29500);
+		values.put(RepairTable.COLUMN_STATION_NAME, "Автомир AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 		repairId = db.insert(RepairTable.TABLE_REPAIR, "", values);
 
@@ -110,10 +112,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		itemValues = new ContentValues();
 		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
+				"Диск тормозной передний");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 3571.48);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "Ate");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "24.0125-0131.1");
+		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
+		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
+
+		itemValues = new ContentValues();
+		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
 				"Колодки тормозные передние");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 1350.00);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 1546.18);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "Textar");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "456123789");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "2383201");
+		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
+		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
+
+		itemValues = new ContentValues();
+		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
+				"Диск тормозной задний");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 3571.48);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "TRW");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "DF 4051");
 		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
 		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
 
@@ -121,9 +143,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		itemValues.put(RepairItemTable.COLUMN_REPAIR_ID, repairId);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_NAME,
 				"Колодки тормозные задние");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 1020.00);
+		itemValues.put(RepairItemTable.COLUMN_SPARE_PRICE, 956.93);
 		itemValues.put(RepairItemTable.COLUMN_SPARE_MANUFACTURER, "TRW");
-		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "789123654");
+		itemValues.put(RepairItemTable.COLUMN_SPARE_CODE, "GDB 1515");
 		itemValues.put(RepairItemTable.COLUMN_WORK_COST, 600);
 		db.insert(RepairItemTable.TABLE_REPAIR_ITEM, "", itemValues);
 	}

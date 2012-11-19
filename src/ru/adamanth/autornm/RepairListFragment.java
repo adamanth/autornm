@@ -80,7 +80,7 @@ public class RepairListFragment extends ListFragment implements
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
-		//mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		// mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
 		mCallbacks.onItemSelected(String.valueOf(id));
 	}
 
@@ -110,10 +110,10 @@ public class RepairListFragment extends ListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] projection = { RepairTable.COLUMN_ID,
-				RepairTable.COLUMN_NAME,
-				RepairTable.COLUMN_DATE,
-				RepairTable.COLUMN_MILEAGE };
+		String[] projection = { RepairTable.COLUMN_ID, RepairTable.COLUMN_NAME,
+				RepairTable.COLUMN_DATE, RepairTable.COLUMN_MILEAGE,
+				RepairTable.COLUMN_STATION_NAME, RepairTable.SUBQUERY_COST };
+
 		CursorLoader cursorLoader = new CursorLoader(getActivity(),
 				RepairContentProvider.CONTENT_URI, projection, null, null, null);
 		return cursorLoader;

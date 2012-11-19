@@ -129,7 +129,7 @@ public class RepairItemListFragment extends ListFragment implements
 				RepairItemTable.COLUMN_SPARE_PRICE,
 				RepairItemTable.COLUMN_SPARE_MANUFACTURER,
 				RepairItemTable.COLUMN_SPARE_CODE,
-				RepairItemTable.COLUMN_WORK_COST };
+				RepairItemTable.COLUMN_WORK_COST};
 
 		String repairId = String.valueOf(0l);
 		if (args != null && args.containsKey(ARG_REPAIR_ID)) {

@@ -7,14 +7,31 @@
     android:paddingRight="12dp" >
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/stationName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TextView
+        android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/layout"
-        android:singleLine="true"
         android:ellipsize="marquee"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,22 +39,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="6dp"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_gravity="right"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/text3"
+            android:id="@+id/mileage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_gravity="right|bottom"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
