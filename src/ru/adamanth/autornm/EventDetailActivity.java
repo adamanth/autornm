@@ -22,9 +22,9 @@ public class EventDetailActivity extends FragmentActivity {
 
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
-			arguments.putString(EventDetailFragment.ARG_ITEM_ID, getIntent()
-					.getStringExtra(EventDetailFragment.ARG_ITEM_ID));
-			EventDetailFragment fragment = new EventDetailFragment();
+			arguments.putString(RepairItemListFragment.ARG_REPAIR_ID, getIntent()
+					.getStringExtra(RepairItemListFragment.ARG_REPAIR_ID));
+			RepairItemListFragment fragment = new RepairItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.event_detail_container, fragment).commit();

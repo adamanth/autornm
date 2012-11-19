@@ -8,6 +8,8 @@ public class RepairListActivity extends FragmentActivity
         implements RepairListFragment.Callbacks {
 
     private boolean mTwoPane;
+    
+    private RepairItemListFragment repairItemListFragment = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,16 +28,22 @@ public class RepairListActivity extends FragmentActivity
     public void onItemSelected(String id) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(EventDetailFragment.ARG_ITEM_ID, id);
-            EventDetailFragment fragment = new EventDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.event_detail_container, fragment)
-                    .commit();
-
+            arguments.putString(RepairItemListFragment.ARG_REPAIR_ID, id);
+            
+            if (repairItemListFragment == null) {
+            	RepairItemListFragment repairItemListFragment = new RepairItemListFragment();
+                repairItemListFragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.event_detail_container, repairItemListFragment)
+                        .commit();
+            } else {
+            	repairItemListFragment.reload(arguments);
+            }
+            
+            
         } else {
             Intent detailIntent = new Intent(this, EventDetailActivity.class);
-            detailIntent.putExtra(EventDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(RepairItemListFragment.ARG_REPAIR_ID, id);
             startActivity(detailIntent);
         }
     }

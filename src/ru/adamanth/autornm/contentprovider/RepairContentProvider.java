@@ -1,6 +1,7 @@
 package ru.adamanth.autornm.contentprovider;
 
 import ru.adamanth.autornm.db.DatabaseHelper;
+import ru.adamanth.autornm.db.tables.RepairItemTable;
 import ru.adamanth.autornm.db.tables.RepairTable;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -17,6 +18,7 @@ public class RepairContentProvider extends ContentProvider {
 
 	private static final int REPAIRS = 10;
 	private static final int REPAIR_ID = 20;
+	private static final int REPAIR_ITEMS = 30;
 
 	private static final String AUTHORITY = "ru.adamanth.autornm.contentprovider";
 
@@ -34,6 +36,7 @@ public class RepairContentProvider extends ContentProvider {
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, REPAIRS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", REPAIR_ID);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/items/#", REPAIR_ITEMS);
 	}
 
 	@Override
@@ -51,24 +54,30 @@ public class RepairContentProvider extends ContentProvider {
 		// Check if the caller has requested a column which does not exists
 		// checkColumns(projection);
 
-		queryBuilder.setTables(RepairTable.TABLE_REPAIR);
 
 		int uriType = sURIMatcher.match(uri);
 		switch (uriType) {
 		case REPAIRS:
+			queryBuilder.setTables(RepairTable.TABLE_REPAIR);
 			break;
 		case REPAIR_ID:
+			queryBuilder.setTables(RepairTable.TABLE_REPAIR);
 			queryBuilder.appendWhere(RepairTable.COLUMN_ID + "="
+					+ uri.getLastPathSegment());
+			break;
+		case REPAIR_ITEMS:
+			queryBuilder.setTables(RepairItemTable.TABLE_REPAIR_ITEM);
+			queryBuilder.appendWhere(RepairItemTable.COLUMN_REPAIR_ID + "="
 					+ uri.getLastPathSegment());
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 
-		SQLiteDatabase db = databaseHelper.getDb();
+		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		Cursor cursor = queryBuilder.query(db, projection, selection,
 				selectionArgs, null, null, sortOrder);
-		// Make sure that potential listeners are getting notified
+		
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
 		return cursor;
