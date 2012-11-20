@@ -4,7 +4,6 @@ import ru.adamanth.autornm.db.DatabaseHelper;
 import ru.adamanth.autornm.db.tables.RepairItemTable;
 import ru.adamanth.autornm.db.tables.RepairTable;
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -16,27 +15,23 @@ public class RepairContentProvider extends ContentProvider {
 
 	private DatabaseHelper databaseHelper;
 
-	private static final int REPAIRS = 10;
-	private static final int REPAIR_ID = 20;
-	private static final int REPAIR_ITEMS = 30;
-
-	private static final String AUTHORITY = "ru.adamanth.autornm.contentprovider";
-
-	private static final String BASE_PATH = "repairs";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-			+ "/" + BASE_PATH);
-
-	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-			+ "/repairs";
-	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-			+ "/repair";
+	private static final int REPAIRS = 1;
+	private static final int REPAIR_ID = 2;
+	private static final int REPAIR_ITEM_ID = 3;
+	private static final int REPAIR_ITEMS_BY_REPAIR_ID = 4;
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
 	static {
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH, REPAIRS);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", REPAIR_ID);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/items/#", REPAIR_ITEMS);
+		sURIMatcher.addURI(RepairContract.AUTHORITY,
+				RepairContract.Repair.BASE_PATH, REPAIRS);
+		sURIMatcher.addURI(RepairContract.AUTHORITY,
+				RepairContract.Repair.BASE_PATH + "/#", REPAIR_ID);
+		sURIMatcher.addURI(RepairContract.AUTHORITY,
+				RepairContract.RepairItem.BASE_PATH + "/#", REPAIR_ITEM_ID);
+		sURIMatcher.addURI(RepairContract.AUTHORITY,
+				RepairContract.RepairItem.BASE_PATH + "/repair_id/#",
+				REPAIR_ITEMS_BY_REPAIR_ID);
 	}
 
 	@Override
@@ -54,7 +49,6 @@ public class RepairContentProvider extends ContentProvider {
 		// Check if the caller has requested a column which does not exists
 		// checkColumns(projection);
 
-
 		int uriType = sURIMatcher.match(uri);
 		switch (uriType) {
 		case REPAIRS:
@@ -65,7 +59,12 @@ public class RepairContentProvider extends ContentProvider {
 			queryBuilder.appendWhere(RepairTable.COLUMN_ID + "="
 					+ uri.getLastPathSegment());
 			break;
-		case REPAIR_ITEMS:
+		case REPAIR_ITEM_ID:
+			queryBuilder.setTables(RepairItemTable.TABLE_REPAIR_ITEM);
+			queryBuilder.appendWhere(RepairItemTable.COLUMN_ID + "="
+					+ uri.getLastPathSegment());
+			break;
+		case REPAIR_ITEMS_BY_REPAIR_ID:
 			queryBuilder.setTables(RepairItemTable.TABLE_REPAIR_ITEM);
 			queryBuilder.appendWhere(RepairItemTable.COLUMN_REPAIR_ID + "="
 					+ uri.getLastPathSegment());
@@ -77,7 +76,7 @@ public class RepairContentProvider extends ContentProvider {
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		Cursor cursor = queryBuilder.query(db, projection, selection,
 				selectionArgs, null, null, sortOrder);
-		
+
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
 		return cursor;
@@ -91,7 +90,17 @@ public class RepairContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		// TODO Auto-generated method stub
+		int uriType = sURIMatcher.match(uri);
+		switch (uriType) {
+		case REPAIRS:
+			return RepairContract.Repair.CONTENT_TYPE;
+		case REPAIR_ID:
+			return RepairContract.Repair.CONTENT_ITEM_TYPE;
+		case REPAIR_ITEM_ID:
+			return RepairContract.RepairItem.CONTENT_ITEM_TYPE;
+		case REPAIR_ITEMS_BY_REPAIR_ID:
+			return RepairContract.RepairItem.CONTENT_TYPE;
+		}
 		return null;
 	}
 

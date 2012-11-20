@@ -1,6 +1,6 @@
 package ru.adamanth.autornm;
 
-import ru.adamanth.autornm.contentprovider.RepairContentProvider;
+import ru.adamanth.autornm.contentprovider.RepairContract;
 import ru.adamanth.autornm.db.tables.RepairTable;
 import android.app.Activity;
 import android.database.Cursor;
@@ -115,7 +115,7 @@ public class RepairListFragment extends ListFragment implements
 				RepairTable.COLUMN_STATION_NAME, RepairTable.SUBQUERY_COST };
 
 		CursorLoader cursorLoader = new CursorLoader(getActivity(),
-				RepairContentProvider.CONTENT_URI, projection, null, null, null);
+				RepairContract.Repair.CONTENT_URI, projection, null, null, null);
 		return cursorLoader;
 	}
 

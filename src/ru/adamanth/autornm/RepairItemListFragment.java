@@ -1,6 +1,6 @@
 package ru.adamanth.autornm;
 
-import ru.adamanth.autornm.contentprovider.RepairContentProvider;
+import ru.adamanth.autornm.contentprovider.RepairContract;
 import ru.adamanth.autornm.db.tables.RepairItemTable;
 import android.app.Activity;
 import android.database.Cursor;
@@ -129,16 +129,17 @@ public class RepairItemListFragment extends ListFragment implements
 				RepairItemTable.COLUMN_SPARE_PRICE,
 				RepairItemTable.COLUMN_SPARE_MANUFACTURER,
 				RepairItemTable.COLUMN_SPARE_CODE,
-				RepairItemTable.COLUMN_WORK_COST};
+				RepairItemTable.COLUMN_WORK_COST };
 
 		String repairId = String.valueOf(0l);
 		if (args != null && args.containsKey(ARG_REPAIR_ID)) {
 			repairId = getArguments().getString(ARG_REPAIR_ID);
 		}
 
-		CursorLoader cursorLoader = new CursorLoader(getActivity(),
-				Uri.withAppendedPath(Uri.withAppendedPath(
-						RepairContentProvider.CONTENT_URI, "items"), repairId),
+		CursorLoader cursorLoader = new CursorLoader(
+				getActivity(),
+				Uri.withAppendedPath(
+						RepairContract.RepairItem.CONTENT_REPAIR_URI, repairId),
 				projection, null, null, null);
 		return cursorLoader;
 	}
