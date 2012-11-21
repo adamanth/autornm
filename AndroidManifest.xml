@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventDetailActivity"
+            android:name=".RepairItemListActivity"
             android:label="@string/title_event_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

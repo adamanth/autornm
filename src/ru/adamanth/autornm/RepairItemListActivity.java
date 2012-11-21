@@ -8,13 +8,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-public class EventDetailActivity extends FragmentActivity {
+public class RepairItemListActivity extends FragmentActivity {
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_event_detail);
+		setContentView(R.layout.activity_repair_item_list);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -27,7 +27,7 @@ public class EventDetailActivity extends FragmentActivity {
 			RepairItemListFragment fragment = new RepairItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.event_detail_container, fragment).commit();
+					.add(R.id.repair_item_list_container, fragment).commit();
 		}
 	}
 

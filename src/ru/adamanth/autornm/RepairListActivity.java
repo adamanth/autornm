@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,7 +12,7 @@ import android.view.MenuItem;
 public class RepairListActivity extends FragmentActivity implements
 		RepairListFragment.Callbacks {
 
-	private boolean mTwoPane;
+	private boolean isLargeLayout;
 
 	private RepairItemListFragment repairItemListFragment = null;
 
@@ -20,8 +21,9 @@ public class RepairListActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_repair_list);
 
-		if (findViewById(R.id.event_detail_container) != null) {
-			mTwoPane = true;
+		isLargeLayout = getResources().getBoolean(R.bool.large_layout);
+
+		if (isLargeLayout) {
 			((RepairListFragment) getSupportFragmentManager().findFragmentById(
 					R.id.repair_list)).setActivateOnItemClick(true);
 		}
@@ -29,7 +31,7 @@ public class RepairListActivity extends FragmentActivity implements
 
 	@Override
 	public void onItemSelected(String id) {
-		if (mTwoPane) {
+		if (isLargeLayout) {
 			Bundle arguments = new Bundle();
 			arguments.putString(RepairItemListFragment.ARG_REPAIR_ID, id);
 
@@ -45,7 +47,7 @@ public class RepairListActivity extends FragmentActivity implements
 			}
 
 		} else {
-			Intent detailIntent = new Intent(this, EventDetailActivity.class);
+			Intent detailIntent = new Intent(this, RepairItemListActivity.class);
 			detailIntent.putExtra(RepairItemListFragment.ARG_REPAIR_ID, id);
 			startActivity(detailIntent);
 		}
@@ -61,9 +63,19 @@ public class RepairListActivity extends FragmentActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_edit:
-			DialogFragment newFragment = new RepairDialogFragment();
-			newFragment.show(getSupportFragmentManager(), "dialog");
+		case R.id.action_new:
+			DialogFragment dialogFragment = new RepairDialogFragment();
+			if (isLargeLayout) {
+
+				dialogFragment.show(getSupportFragmentManager(), "dialog");
+			} else {
+				FragmentTransaction transaction = getSupportFragmentManager()
+						.beginTransaction();
+				transaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				transaction.add(android.R.id.content, dialogFragment)
+						.addToBackStack(null).commit();
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
