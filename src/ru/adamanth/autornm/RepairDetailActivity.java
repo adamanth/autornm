@@ -9,13 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 public class RepairDetailActivity extends FragmentActivity {
+
+	protected static final String TAG = "RepairDetailActivity";
 
 	@SuppressLint("NewApi")
 	@Override
@@ -47,24 +48,12 @@ public class RepairDetailActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.dialog_action, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
 			NavUtils.navigateUpTo(this, new Intent(this,
 					RepairListActivity.class));
-			return true;
-		case R.id.action_cancel:
-			finish();
-			return true;
-		case R.id.action_save:
-			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -84,5 +73,4 @@ public class RepairDetailActivity extends FragmentActivity {
 		activity.getWindow().setAttributes(
 				(android.view.WindowManager.LayoutParams) params);
 	}
-
 }

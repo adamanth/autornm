@@ -7,6 +7,7 @@ import ru.adamanth.autornm.contentprovider.RepairContract;
 import ru.adamanth.autornm.db.tables.RepairTable;
 import ru.adamanth.autornm.model.Repair;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.database.Cursor;
@@ -14,7 +15,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -37,10 +42,14 @@ public class RepairDialogFragment extends Fragment {
 	private EditText stationText;
 
 	private Uri repairUri;
+	
+	private static final String TAG = "RepairDialogFragment";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setHasOptionsMenu(true);
 
 		date = Calendar.getInstance();
 
@@ -121,10 +130,34 @@ public class RepairDialogFragment extends Fragment {
 			date.setTime(repair.getDate());
 		}
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater ) {
+		inflater.inflate(R.menu.dialog_action, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.action_cancel:
+			Log.i(TAG, "action_cancel");
+			getActivity().setResult(Activity.RESULT_CANCELED);
+			getActivity().finish();
+			return true;
+		case R.id.action_save:
+			Log.i(TAG, "action_save");
+			saveAndFinish();
+			getActivity().setResult(Activity.RESULT_OK);
+			getActivity().finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 	private void saveAndFinish() {
+		Log.i(TAG, "save");
 	}
-	
-	
 
 }

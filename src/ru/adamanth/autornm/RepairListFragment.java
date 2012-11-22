@@ -13,6 +13,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import android.widget.ListView;
 
 public class RepairListFragment extends ListFragment implements
 		LoaderManager.LoaderCallbacks<Cursor> {
+	
+	private static final String TAG = "RepairListFragment";
 
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 	private static final int REPAIR_LIST_LOADER = 0x01;
@@ -165,7 +168,7 @@ public class RepairListFragment extends ListFragment implements
 			}*/
 			
 			Intent detailIntent = new Intent(this.getActivity(), RepairDetailActivity.class);
-			startActivity(detailIntent);
+			startActivityForResult(detailIntent, 1);
 			
 			return true;
 		case R.id.action_edit:
@@ -202,7 +205,7 @@ public class RepairListFragment extends ListFragment implements
 					dialogFragment1.setArguments(args);
 				}
 				
-				startActivity(detailIntent1);
+				startActivityForResult(detailIntent1, 2);
 
 			} else {
 				FragmentTransaction transaction = getActivity()
@@ -216,6 +219,14 @@ public class RepairListFragment extends ListFragment implements
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		Log.i(TAG, "onActivityResult, requestCode = " + String.valueOf(requestCode) + ", resultCode = " + resultCode);
 	}
 
 }
