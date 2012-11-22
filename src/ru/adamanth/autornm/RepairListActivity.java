@@ -2,15 +2,10 @@ package ru.adamanth.autornm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 public class RepairListActivity extends FragmentActivity implements
-		RepairListFragment.Callbacks {
+		RepairListFragment.RepairListCallbacks {
 
 	private boolean isLargeLayout;
 
@@ -52,34 +47,4 @@ public class RepairListActivity extends FragmentActivity implements
 			startActivity(detailIntent);
 		}
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.repair_action, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_new:
-			DialogFragment dialogFragment = new RepairDialogFragment();
-			if (isLargeLayout) {
-
-				dialogFragment.show(getSupportFragmentManager(), "dialog");
-			} else {
-				FragmentTransaction transaction = getSupportFragmentManager()
-						.beginTransaction();
-				transaction
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				transaction.add(android.R.id.content, dialogFragment)
-						.addToBackStack(null).commit();
-			}
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
 }

@@ -3,12 +3,19 @@ package ru.adamanth.autornm;
 import ru.adamanth.autornm.contentprovider.RepairContract;
 import ru.adamanth.autornm.db.tables.RepairTable;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -18,28 +25,31 @@ public class RepairListFragment extends ListFragment implements
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 	private static final int REPAIR_LIST_LOADER = 0x01;
 
-	private Callbacks mCallbacks = sDummyCallbacks;
-	private int mActivatedPosition = ListView.INVALID_POSITION;
+	private RepairListCallbacks callbacks = dummyCallbacks;
+	private int activatedPosition = ListView.INVALID_POSITION;
 
 	private RepairListAdapter repairListAdapter;
 
-	public interface Callbacks {
+	private boolean isLargeLayout;
+
+	public interface RepairListCallbacks {
 
 		public void onItemSelected(String id);
 	}
 
-	private static Callbacks sDummyCallbacks = new Callbacks() {
+	private static RepairListCallbacks dummyCallbacks = new RepairListCallbacks() {
 		@Override
 		public void onItemSelected(String id) {
 		}
 	};
 
-	public RepairListFragment() {
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		isLargeLayout = getResources().getBoolean(R.bool.large_layout);
+
+		setHasOptionsMenu(true);
 
 		getLoaderManager().initLoader(REPAIR_LIST_LOADER, null, this);
 
@@ -62,33 +72,34 @@ public class RepairListFragment extends ListFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if (!(activity instanceof Callbacks)) {
+		if (!(activity instanceof RepairListCallbacks)) {
 			throw new IllegalStateException(
 					"Activity must implement fragment's callbacks.");
 		}
 
-		mCallbacks = (Callbacks) activity;
+		callbacks = (RepairListCallbacks) activity;
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mCallbacks = sDummyCallbacks;
+		callbacks = dummyCallbacks;
 	}
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
-		// mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
-		mCallbacks.onItemSelected(String.valueOf(id));
+
+		activatedPosition = position;
+		callbacks.onItemSelected(String.valueOf(id));
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (mActivatedPosition != ListView.INVALID_POSITION) {
-			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+		if (activatedPosition != ListView.INVALID_POSITION) {
+			outState.putInt(STATE_ACTIVATED_POSITION, activatedPosition);
 		}
 	}
 
@@ -100,12 +111,12 @@ public class RepairListFragment extends ListFragment implements
 
 	public void setActivatedPosition(int position) {
 		if (position == ListView.INVALID_POSITION) {
-			getListView().setItemChecked(mActivatedPosition, false);
+			getListView().setItemChecked(activatedPosition, false);
 		} else {
 			getListView().setItemChecked(position, true);
 		}
 
-		mActivatedPosition = position;
+		activatedPosition = position;
 	}
 
 	@Override
@@ -128,4 +139,83 @@ public class RepairListFragment extends ListFragment implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		repairListAdapter.swapCursor(null);
 	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.repair_action, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_new:
+			/*
+			DialogFragment dialogFragment = new RepairDialogFragment();
+			if (isLargeLayout) {
+
+				dialogFragment.show(getActivity().getSupportFragmentManager(),
+						"dialog");
+			} else {
+				FragmentTransaction transaction = getActivity()
+						.getSupportFragmentManager().beginTransaction();
+				transaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				transaction.add(android.R.id.content, dialogFragment)
+						.addToBackStack(null).commit();
+			}*/
+			
+			Intent detailIntent = new Intent(this.getActivity(), RepairDetailActivity.class);
+			startActivity(detailIntent);
+			
+			return true;
+		case R.id.action_edit:
+			Fragment dialogFragment1 = new RepairDialogFragment();
+			if (isLargeLayout) {
+				/*if (activatedPosition != ListView.INVALID_POSITION) {
+					long id = getListView().getItemIdAtPosition(
+							activatedPosition);
+					Uri uri = RepairContract.buildUri(
+							RepairContract.Repair.CONTENT_URI, id);
+
+					Bundle args = new Bundle();
+					args.putParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE,
+							uri);
+
+					dialogFragment1.setArguments(args);
+				}
+
+				dialogFragment1.show(getActivity().getSupportFragmentManager(),
+						"dialog");*/
+				
+				Intent detailIntent1 = new Intent(this.getActivity(), RepairDetailActivity.class);
+				
+				if (activatedPosition != ListView.INVALID_POSITION) {
+					long id = getListView().getItemIdAtPosition(
+							activatedPosition);
+					Uri uri = RepairContract.buildUri(
+							RepairContract.Repair.CONTENT_URI, id);
+
+					Bundle args = new Bundle();
+					detailIntent1.putExtra(RepairContract.Repair.CONTENT_ITEM_TYPE,
+							uri);
+
+					dialogFragment1.setArguments(args);
+				}
+				
+				startActivity(detailIntent1);
+
+			} else {
+				FragmentTransaction transaction = getActivity()
+						.getSupportFragmentManager().beginTransaction();
+				transaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				transaction.add(android.R.id.content, dialogFragment1)
+						.addToBackStack(null).commit();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 }

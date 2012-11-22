@@ -8,4 +8,11 @@
         android:title="@string/action_new">
     </item>
 
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_action_edit"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/action_edit">
+    </item>
+
 </menu>

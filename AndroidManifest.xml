@@ -33,6 +33,14 @@
             android:authorities="ru.adamanth.autornm.contentprovider"
             android:exported="false" >
         </provider>
+
+        <activity
+            android:name=".RepairDetailActivity"
+            android:theme="@style/PopupTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RepairListActivity" />
+        </activity>
     </application>
 
 </manifest>

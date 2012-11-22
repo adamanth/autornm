@@ -4,5 +4,8 @@
     <string name="title_event_detail">Event Detail</string>
     <string name="title_repair_list">Repairs</string>
     <string name="action_new">New</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
 
 </resources>

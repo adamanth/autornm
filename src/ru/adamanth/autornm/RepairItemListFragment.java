@@ -21,17 +21,17 @@ public class RepairItemListFragment extends ListFragment implements
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 	private static final int REPAIR_ITEM_LIST_LOADER = 0x01;
 
-	// private Callbacks mCallbacks = sDummyCallbacks;
+	// private RepairListCallbacks mCallbacks = sDummyCallbacks;
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
 	private RepairItemListAdapter repairItemListAdapter;
 
 	/*
-	 * public interface Callbacks {
+	 * public interface RepairListCallbacks {
 	 * 
 	 * public void onItemSelected(String id); }
 	 * 
-	 * private static Callbacks sDummyCallbacks = new Callbacks() {
+	 * private static RepairListCallbacks sDummyCallbacks = new RepairListCallbacks() {
 	 * 
 	 * @Override public void onItemSelected(String id) { } };
 	 */
@@ -76,11 +76,11 @@ public class RepairItemListFragment extends ListFragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		/*
-		 * if (!(activity instanceof Callbacks)) { throw new
+		 * if (!(activity instanceof RepairListCallbacks)) { throw new
 		 * IllegalStateException(
 		 * "Activity must implement fragment's callbacks."); }
 		 * 
-		 * mCallbacks = (Callbacks) activity;
+		 * mCallbacks = (RepairListCallbacks) activity;
 		 */
 	}
 

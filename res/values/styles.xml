@@ -2,4 +2,14 @@
 
     <style name="AppTheme" parent="android:Theme.Light" />
 
+    <style name="DateSpinnerStyle" parent="@android:style/Widget.Spinner" />
+
+    <style name="PopupTheme" parent="@android:Theme.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

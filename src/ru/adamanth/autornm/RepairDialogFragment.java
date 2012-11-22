@@ -2,12 +2,18 @@ package ru.adamanth.autornm;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
+import ru.adamanth.autornm.contentprovider.RepairContract;
+import ru.adamanth.autornm.db.tables.RepairTable;
+import ru.adamanth.autornm.model.Repair;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,84 +22,109 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class RepairDialogFragment extends DialogFragment implements
-		DatePickerDialog.OnDateSetListener {
+public class RepairDialogFragment extends Fragment {
 
-	private Date date;
+	private static DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
+
+	private Calendar date;
+
+	private EditText nameText;
+
+	private TextView dateText;
+
+	private EditText mileageText;
+
+	private EditText stationText;
+
+	private Uri repairUri;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		date = Calendar.getInstance();
+
+		// Check from the saved Instance
+		repairUri = (savedInstanceState == null) ? null
+				: (Uri) savedInstanceState
+						.getParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE);
+	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		date = new Date();
-		
+
 		View v = inflater.inflate(R.layout.fragment_repair_detail, container,
 				false);
 
-		EditText dateText = (EditText) v.findViewById(R.id.dateText);
+		nameText = (EditText) v.findViewById(R.id.nameText);
+		mileageText = (EditText) v.findViewById(R.id.mileageText);
+		stationText = (EditText) v.findViewById(R.id.stationText);
+
+		dateText = (TextView) v.findViewById(R.id.dateText);
+		dateText.setText(df.format(date.getTime()));
 		dateText.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				showDatePickerDialog(v);
 			}
 		});
 
+		// Or passed from the other activity
+		Bundle args = getArguments();
+		if (args != null) {
+			repairUri = args
+					.getParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE);
+
+			fillData(repairUri);
+		}
+
 		return v;
 	}
 
-	public void showDatePickerDialog(View v) {
-		Bundle args = new Bundle();
-		args.putLong(DatePickerFragment.ARG_DATE, date.getTime());
-		
-		DatePickerFragment datePickerFragment = new DatePickerFragment();
-		datePickerFragment.setOnDateSetListener(this);
+	@SuppressLint("NewApi")
+	private void showDatePickerDialog(View v) {
+		DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+				new OnDateSetListener() {
+					@Override
+					public void onDateSet(DatePicker arg0, int y, int m, int d) {
+						date.set(y, m, d);
+						dateText.setText(df.format(date.getTime()));
+					}
+				}, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date
+						.get(Calendar.DAY_OF_MONTH));
 
-		datePickerFragment.setArguments(args);
-		
-		datePickerFragment.show(getActivity().getSupportFragmentManager(),
-				"datePicker");
-	}
-
-	public void onDateSet(DatePicker view, int year, int month, int day) {
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, year);
-		c.set(Calendar.MONTH, month);
-		c.set(Calendar.DAY_OF_MONTH, day);
-
-		date = c.getTime();
-
-		TextView tv = (TextView) getView().findViewById(R.id.dateText);
-		tv.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(date));
-	}
-
-	public static class DatePickerFragment extends DialogFragment {
-		
-		public static final String ARG_DATE = "date";
-
-		private DatePickerDialog.OnDateSetListener onDateSetListener = null;
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			Calendar c = Calendar.getInstance();
-			
-			if (getArguments() != null && getArguments().containsKey(ARG_DATE)) {
-				c.setTime(new Date(getArguments().getLong(ARG_DATE)));
-			}
-			
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
-
-			// Create a new instance of DatePickerDialog and return it
-			return new DatePickerDialog(getActivity(), onDateSetListener, year,
-					month, day);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			datePickerDialog.getDatePicker().setCalendarViewShown(false);
 		}
 
-		public void setOnDateSetListener(
-				DatePickerDialog.OnDateSetListener onDateSetListener) {
-			this.onDateSetListener = onDateSetListener;
-		}
-		
-		
-
+		datePickerDialog.show();
 	}
+
+	private void fillData(Uri uri) {
+		String[] projection = { RepairTable.COLUMN_ID, RepairTable.COLUMN_NAME,
+				RepairTable.COLUMN_DATE, RepairTable.COLUMN_MILEAGE,
+				RepairTable.COLUMN_STATION_NAME };
+
+		Cursor cursor = getActivity().getContentResolver().query(uri,
+				projection, null, null, null);
+
+		if (cursor != null) {
+			cursor.moveToFirst();
+			Repair repair = new Repair(cursor);
+
+			nameText.setText(repair.getName());
+			dateText.setText(df.format(repair.getDate()));
+			mileageText.setText(String.valueOf(repair.getMileage()));
+			stationText.setText(repair.getStationName());
+
+			date.setTime(repair.getDate());
+		}
+	}
+
+	private void saveAndFinish() {
+	}
+	
+	
+
 }

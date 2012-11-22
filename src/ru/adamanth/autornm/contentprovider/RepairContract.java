@@ -7,6 +7,14 @@ public final class RepairContract {
 
 	public static final String AUTHORITY = "ru.adamanth.autornm.contentprovider";
 	public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
+	
+	public static Uri buildUri(Uri uri, long id) {
+		return buildUri(uri, String.valueOf(id));
+	}
+
+	public static Uri buildUri(Uri uri, String id) {
+		return Uri.withAppendedPath(uri, id);
+	}
 
 	public static class Repair {
 
