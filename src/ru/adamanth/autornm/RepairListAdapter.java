@@ -17,6 +17,7 @@ public class RepairListAdapter extends ResourceCursorAdapter {
 
 	public RepairListAdapter(Context context, Cursor c) {
 		super(context, R.layout.repair_list_item, c, false);
+		//super(context, android.R.layout.simple_list_item_multiple_choice, c, false);
 	}
 
 	@Override
@@ -24,6 +25,10 @@ public class RepairListAdapter extends ResourceCursorAdapter {
 
 		if (cursor != null && cursor.getCount() > 0
 				&& cursor.getPosition() >= 0) {
+			/*TextView textView = (TextView) view.findViewById(android.R.id.text1);
+			textView.setText(cursor.getString(cursor
+					.getColumnIndex(RepairTable.COLUMN_NAME)));*/
+			
 			TextView textView = (TextView) view.findViewById(R.id.name);
 			textView.setText(cursor.getString(cursor
 					.getColumnIndex(RepairTable.COLUMN_NAME)));
@@ -43,6 +48,7 @@ public class RepairListAdapter extends ResourceCursorAdapter {
 			textView = (TextView) view.findViewById(R.id.stationName);
 			textView.setText(cursor.getString(cursor
 					.getColumnIndex(RepairTable.COLUMN_STATION_NAME)));
+					
 			
 		}
 	}

@@ -2,10 +2,12 @@ package ru.adamanth.autornm;
 
 import ru.adamanth.autornm.contentprovider.RepairContract;
 import ru.adamanth.autornm.db.tables.RepairTable;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,15 +16,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 
 public class RepairListFragment extends ListFragment implements
 		LoaderManager.LoaderCallbacks<Cursor> {
-	
+
 	private static final String TAG = "RepairListFragment";
 
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
@@ -106,10 +110,75 @@ public class RepairListFragment extends ListFragment implements
 		}
 	}
 
+	@SuppressLint("NewApi")
 	public void setActivateOnItemClick(boolean activateOnItemClick) {
-		getListView().setChoiceMode(
-				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
-						: ListView.CHOICE_MODE_NONE);
+		final ListView listView = getListView();
+		if (activateOnItemClick
+				&& (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)) {
+
+			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+				@Override
+				public void onItemCheckedStateChanged(ActionMode mode,
+						int position, long id, boolean checked) {
+
+					mode.getMenu().findItem(R.id.action_edit)
+							.setVisible(listView.getCheckedItemCount() == 1);
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						MenuItem item) {
+					// Respond to clicks on the actions in the CAB
+					switch (item.getItemId()) {
+					case R.id.action_edit:
+						Log.i(TAG, "edit");
+						mode.finish(); // Action picked, so close the CAB
+						return true;
+					case R.id.action_delete:
+						Log.i(TAG, "delete");
+						mode.finish(); // Action picked, so close the CAB
+						return true;
+					default:
+						return false;
+					}
+				}
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					// Inflate the menu for the CAB
+					MenuInflater inflater = mode.getMenuInflater();
+					inflater.inflate(R.menu.repair_context, menu);
+					return true;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					// Here you can make any necessary updates to the activity
+					// when
+					// the CAB is removed. By default, selected items are
+					// deselected/unchecked.
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					// Here you can perform updates to the CAB due to
+					// an invalidate() request
+					return false;
+				}
+			});
+			/*
+			 * listView.setOnLongClickListener(new View.OnLongClickListener() {
+			 * 
+			 * @Override public boolean onLongClick(View v) { Log.i(TAG,
+			 * "onLongClick");
+			 * listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			 * return true; } });
+			 */
+		} else {
+			listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+		}
 	}
 
 	public void setActivatedPosition(int position) {
@@ -153,45 +222,45 @@ public class RepairListFragment extends ListFragment implements
 		switch (item.getItemId()) {
 		case R.id.action_new:
 			/*
-			DialogFragment dialogFragment = new RepairDialogFragment();
-			if (isLargeLayout) {
+			 * DialogFragment dialogFragment = new RepairDialogFragment(); if
+			 * (isLargeLayout) {
+			 * 
+			 * dialogFragment.show(getActivity().getSupportFragmentManager(),
+			 * "dialog"); } else { FragmentTransaction transaction =
+			 * getActivity() .getSupportFragmentManager().beginTransaction();
+			 * transaction
+			 * .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			 * transaction.add(android.R.id.content, dialogFragment)
+			 * .addToBackStack(null).commit(); }
+			 */
 
-				dialogFragment.show(getActivity().getSupportFragmentManager(),
-						"dialog");
-			} else {
-				FragmentTransaction transaction = getActivity()
-						.getSupportFragmentManager().beginTransaction();
-				transaction
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				transaction.add(android.R.id.content, dialogFragment)
-						.addToBackStack(null).commit();
-			}*/
-			
-			Intent detailIntent = new Intent(this.getActivity(), RepairDetailActivity.class);
+			Intent detailIntent = new Intent(this.getActivity(),
+					RepairDetailActivity.class);
 			startActivityForResult(detailIntent, 1);
-			
+
 			return true;
 		case R.id.action_edit:
 			Fragment dialogFragment1 = new RepairDialogFragment();
 			if (isLargeLayout) {
-				/*if (activatedPosition != ListView.INVALID_POSITION) {
-					long id = getListView().getItemIdAtPosition(
-							activatedPosition);
-					Uri uri = RepairContract.buildUri(
-							RepairContract.Repair.CONTENT_URI, id);
+				/*
+				 * if (activatedPosition != ListView.INVALID_POSITION) { long id
+				 * = getListView().getItemIdAtPosition( activatedPosition); Uri
+				 * uri = RepairContract.buildUri(
+				 * RepairContract.Repair.CONTENT_URI, id);
+				 * 
+				 * Bundle args = new Bundle();
+				 * args.putParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE,
+				 * uri);
+				 * 
+				 * dialogFragment1.setArguments(args); }
+				 * 
+				 * dialogFragment1.show(getActivity().getSupportFragmentManager()
+				 * , "dialog");
+				 */
 
-					Bundle args = new Bundle();
-					args.putParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE,
-							uri);
+				Intent detailIntent1 = new Intent(this.getActivity(),
+						RepairDetailActivity.class);
 
-					dialogFragment1.setArguments(args);
-				}
-
-				dialogFragment1.show(getActivity().getSupportFragmentManager(),
-						"dialog");*/
-				
-				Intent detailIntent1 = new Intent(this.getActivity(), RepairDetailActivity.class);
-				
 				if (activatedPosition != ListView.INVALID_POSITION) {
 					long id = getListView().getItemIdAtPosition(
 							activatedPosition);
@@ -199,12 +268,12 @@ public class RepairListFragment extends ListFragment implements
 							RepairContract.Repair.CONTENT_URI, id);
 
 					Bundle args = new Bundle();
-					detailIntent1.putExtra(RepairContract.Repair.CONTENT_ITEM_TYPE,
-							uri);
+					detailIntent1.putExtra(
+							RepairContract.Repair.CONTENT_ITEM_TYPE, uri);
 
 					dialogFragment1.setArguments(args);
 				}
-				
+
 				startActivityForResult(detailIntent1, 2);
 
 			} else {
@@ -225,8 +294,11 @@ public class RepairListFragment extends ListFragment implements
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		
-		Log.i(TAG, "onActivityResult, requestCode = " + String.valueOf(requestCode) + ", resultCode = " + resultCode);
+
+		Log.i(TAG,
+				"onActivityResult, requestCode = "
+						+ String.valueOf(requestCode) + ", resultCode = "
+						+ resultCode);
 	}
 
 }

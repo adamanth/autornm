@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
@@ -73,4 +74,21 @@ public class RepairDetailActivity extends FragmentActivity {
 		activity.getWindow().setAttributes(
 				(android.view.WindowManager.LayoutParams) params);
 	}
+	
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		Log.i(TAG, "onPause");
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		Log.i(TAG, "onSaveInstanceState");
+	}
+
 }

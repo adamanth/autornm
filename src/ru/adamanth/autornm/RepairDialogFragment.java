@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -42,13 +43,13 @@ public class RepairDialogFragment extends Fragment {
 	private EditText stationText;
 
 	private Uri repairUri;
-	
+
 	private static final String TAG = "RepairDialogFragment";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setHasOptionsMenu(true);
 
 		date = Calendar.getInstance();
@@ -130,9 +131,9 @@ public class RepairDialogFragment extends Fragment {
 			date.setTime(repair.getDate());
 		}
 	}
-	
+
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater ) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.dialog_action, menu);
 	}
 
@@ -147,7 +148,7 @@ public class RepairDialogFragment extends Fragment {
 			return true;
 		case R.id.action_save:
 			Log.i(TAG, "action_save");
-			saveAndFinish();
+			save();
 			getActivity().setResult(Activity.RESULT_OK);
 			getActivity().finish();
 			return true;
@@ -156,8 +157,41 @@ public class RepairDialogFragment extends Fragment {
 		}
 	}
 
-	private void saveAndFinish() {
+	private void save() {
 		Log.i(TAG, "save");
+
+		String name = nameText.getText().toString();
+		long mileage = Long.valueOf(mileageText.getText().toString());
+		String station = stationText.getText().toString();
+		long dateLong = date.getTime().getTime() / 1000l;
+
+		ContentValues values = new ContentValues();
+		values.put(RepairTable.COLUMN_NAME, name);
+		values.put(RepairTable.COLUMN_DATE, dateLong);
+		values.put(RepairTable.COLUMN_MILEAGE, mileage);
+		values.put(RepairTable.COLUMN_STATION_NAME, station);
+
+		if (repairUri == null) {
+			repairUri = getActivity().getContentResolver().insert(
+					RepairContract.Repair.CONTENT_URI, values);
+		} else {
+			getActivity().getContentResolver().update(repairUri, values, null,
+					null);
+		}
 	}
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+
+		Log.i(TAG, "onPause");
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		Log.i(TAG, "onSaveInstanceState");
+		super.onSaveInstanceState(outState);
+		outState.putParcelable(RepairContract.Repair.CONTENT_ITEM_TYPE, repairUri);
+	}
 }

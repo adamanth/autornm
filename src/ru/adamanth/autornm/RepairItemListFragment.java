@@ -11,6 +11,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class RepairItemListFragment extends ListFragment implements
@@ -94,6 +98,10 @@ public class RepairItemListFragment extends ListFragment implements
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
+		/*
+		FrameLayout fl = (FrameLayout) getActivity().getSupportFragmentManager().findFragmentById().getView().findViewById(R.id.repair_item_container);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 3.0f);
+		fl.setLayoutParams(params);*/
 		// mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
 	}
 
