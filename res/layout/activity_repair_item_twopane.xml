@@ -6,25 +6,19 @@
     android:layout_marginRight="16dp"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".RepairListActivity" >
+    tools:context=".RepairItemDetailActivity" >
 
     <fragment
-        android:id="@+id/repair_list"
-        android:name="ru.adamanth.autornm.RepairListFragment"
+        android:id="@+id/repair_item_list"
+        android:name="ru.adamanth.autornm.RepairItemListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
     <FrameLayout
-        android:id="@+id/event_detail_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3" />
-
-    <FrameLayout
         android:id="@+id/repair_item_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="5" />
+        android:layout_weight="3" />
 
 </LinearLayout>
