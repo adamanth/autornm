@@ -41,12 +41,12 @@ public class RepairListFragment extends ListFragment implements
 
 	public interface RepairListCallbacks {
 
-		public void onItemSelected(String id);
+		public void onRepairSelected(String id);
 	}
 
 	private static RepairListCallbacks dummyCallbacks = new RepairListCallbacks() {
 		@Override
-		public void onItemSelected(String id) {
+		public void onRepairSelected(String id) {
 		}
 	};
 
@@ -99,7 +99,7 @@ public class RepairListFragment extends ListFragment implements
 		super.onListItemClick(listView, view, position, id);
 
 		activatedPosition = position;
-		callbacks.onItemSelected(String.valueOf(id));
+		callbacks.onRepairSelected(String.valueOf(id));
 	}
 
 	@Override

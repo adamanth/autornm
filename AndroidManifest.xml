@@ -27,6 +27,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RepairListActivity" />
         </activity>
+        <activity
+            android:name=".RepairItemListDetailActivity"
+            android:label="@string/title_event_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RepairItemListActivity" />
+        </activity>
 
         <provider
             android:name=".contentprovider.RepairContentProvider"

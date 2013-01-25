@@ -12,9 +12,21 @@
         android:id="@+id/repair_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
+    
+    <fragment android:name="ru.adamanth.autornm.RepairItemListFragment"
+        android:id="@+id/repair_item_list"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
+    
+    <fragment android:name="ru.adamanth.autornm.RepairItemDetailFragment"
+        android:id="@+id/repair_item_detail"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
 
-    <FrameLayout android:id="@+id/event_detail_container"
+    <!-- FrameLayout android:id="@+id/event_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3" />
@@ -22,6 +34,6 @@
     <FrameLayout android:id="@+id/repair_item_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0" />
+        android:layout_weight="0" /-->
 
 </LinearLayout>

@@ -11,10 +11,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class RepairItemListFragment extends ListFragment implements
@@ -25,20 +21,23 @@ public class RepairItemListFragment extends ListFragment implements
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 	private static final int REPAIR_ITEM_LIST_LOADER = 0x01;
 
-	// private RepairListCallbacks mCallbacks = sDummyCallbacks;
+	private RepairItemListCallbacks callbacks = dummyCallbacks;
+
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
 	private RepairItemListAdapter repairItemListAdapter;
 
-	/*
-	 * public interface RepairListCallbacks {
-	 * 
-	 * public void onItemSelected(String id); }
-	 * 
-	 * private static RepairListCallbacks sDummyCallbacks = new RepairListCallbacks() {
-	 * 
-	 * @Override public void onItemSelected(String id) { } };
-	 */
+	public interface RepairItemListCallbacks {
+
+		public void onRepairItemSelected(String id);
+	}
+
+	private static RepairItemListCallbacks dummyCallbacks = new RepairItemListCallbacks() {
+
+		@Override
+		public void onRepairItemSelected(String id) {
+		}
+	};
 
 	public RepairItemListFragment() {
 	}
@@ -79,30 +78,36 @@ public class RepairItemListFragment extends ListFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		/*
-		 * if (!(activity instanceof RepairListCallbacks)) { throw new
-		 * IllegalStateException(
-		 * "Activity must implement fragment's callbacks."); }
-		 * 
-		 * mCallbacks = (RepairListCallbacks) activity;
-		 */
+		if (!(activity instanceof RepairItemListCallbacks)) {
+			throw new IllegalStateException(
+					"Activity must implement fragment's callbacks.");
+		}
+
+		callbacks = (RepairItemListCallbacks) activity;
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		// mCallbacks = sDummyCallbacks;
+		callbacks = dummyCallbacks;
 	}
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
-		super.onListItemClick(listView, view, position, id);
+		// super.onListItemClick(listView, view, position, id);
+
 		/*
-		FrameLayout fl = (FrameLayout) getActivity().getSupportFragmentManager().findFragmentById().getView().findViewById(R.id.repair_item_container);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 3.0f);
-		fl.setLayoutParams(params);*/
-		// mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		 * Fragment f =
+		 * getActivity().getSupportFragmentManager().findFragmentById
+		 * (R.id.repair_list);
+		 * 
+		 * LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0,
+		 * LayoutParams.MATCH_PARENT, 0.0f);
+		 * f.getView().setLayoutParams(params);
+		 */
+
+		callbacks.onRepairItemSelected(String.valueOf(id));
 	}
 
 	@Override
@@ -141,7 +146,7 @@ public class RepairItemListFragment extends ListFragment implements
 
 		String repairId = String.valueOf(0l);
 		if (args != null && args.containsKey(ARG_REPAIR_ID)) {
-			repairId = getArguments().getString(ARG_REPAIR_ID);
+			repairId = args.getString(ARG_REPAIR_ID);
 		}
 
 		CursorLoader cursorLoader = new CursorLoader(
